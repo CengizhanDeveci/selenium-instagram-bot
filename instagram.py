@@ -26,21 +26,17 @@ class Instagram:
         time.sleep(2)
         self.driver.find_element_by_xpath("/html/body/div[1]/section/main/div/header/section/ul/li[2]/a").click()
         time.sleep(2)
-        dialog = self.driver.find_element_by_css_selector("div[role=dialog] ul")
-        action = webdriver.ActionChains(self.driver)
-        followerCount = len(dialog.find_elements_by_css_selector("li"))
-        dialog.click()
+        document = "document.querySelector('.isgrP')"
+        lastHeight = self.driver.execute_script(f"return {document}.scrollHeight")
         while True:
-            action.key_down(Keys.SPACE).key_up(Keys.SPACE).perform()
-            action.key_down(Keys.SPACE).key_up(Keys.SPACE).perform()
+            self.driver.execute_script(f"return {document}.scrollTo(0,{document}.scrollHeight)")
             time.sleep(2)
-            newCount = len(dialog.find_elements_by_css_selector("li"))
-            if newCount != followerCount:
-                followerCount = newCount
-                print(followerCount)
-            else:
+            currentHeight = self.driver.execute_script(f"return {document}.scrollHeight")
+            if lastHeight == currentHeight:
                 break
-        users = dialog.find_elements_by_css_selector("li")
+            else:
+                lastHeight = currentHeight
+        users = self.driver.find_elements_by_css_selector("div[role=dialog] ul li")
         for user in users:
             self.followers.append(user.find_element_by_css_selector("a").get_attribute("href"))
         with open(f"{self.username} s instagram followers.txt","w",encoding="utf-8") as file:
@@ -52,21 +48,17 @@ class Instagram:
         time.sleep(2)
         self.driver.find_element_by_xpath("//*[@id='react-root']/section/main/div/header/section/ul/li[3]/a").click()
         time.sleep(2)
-        dialog = self.driver.find_element_by_css_selector("div[role=dialog] ul")
-        action = webdriver.ActionChains(self.driver)
-        followingCount = len(dialog.find_elements_by_css_selector("li"))
-        dialog.click()
+        document = "document.querySelector('.isgrP')"
+        lastHeight = self.driver.execute_script(f"return {document}.scrollHeight")
         while True:
-            action.key_down(Keys.SPACE).key_up(Keys.SPACE).perform()
-            action.key_down(Keys.SPACE).key_up(Keys.SPACE).perform()
+            self.driver.execute_script(f"return {document}.scrollTo(0,{document}.scrollHeight)")
             time.sleep(2)
-            newCount = len(dialog.find_elements_by_css_selector("li"))
-            if newCount != followingCount:
-                followingCount = newCount
-                print(followingCount)
-            else:
+            currentHeight = self.driver.execute_script(f"return {document}.scrollHeight")
+            if lastHeight == currentHeight:
                 break
-        users = dialog.find_elements_by_css_selector("li")
+            else:
+                lastHeight = currentHeight
+        users = self.driver.find_elements_by_css_selector("div[role=dialog] ul li")
         for user in users:
             self.following.append(user.find_element_by_css_selector("a").get_attribute("href"))
         with open(f"{self.username} s instagram following.txt","w",encoding="utf-8") as file:
